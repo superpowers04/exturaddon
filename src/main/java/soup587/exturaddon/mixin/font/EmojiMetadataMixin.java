@@ -21,18 +21,19 @@ public class EmojiMetadataMixin {
 	private static final String JSON_KEY_NAMES = "names";
 	private static final String JSON_KEY_SHORTCUTS = "shortcuts";
 	private static final String JSON_KEY_DEFAULT_COLOR = "color";
-	public static EmojiMetadata fromJson(JsonObject entry) {
-        int frameCount = JsonUtils.getIntOrDefault(entry, JSON_KEY_FRAMES, 1);
-        int frameTime = JsonUtils.getIntOrDefault(entry, JSON_KEY_FRAME_TIME, 1);
-        int width = JsonUtils.getIntOrDefault(entry, JSON_KEY_WIDTH, 8);
+	// public static EmojiMetadata fromJson(JsonObject entry) {
+    //     int frameCount = JsonUtils.getIntOrDefault(entry, JSON_KEY_FRAMES, 1);
+    //     int frameTime = JsonUtils.getIntOrDefault(entry, JSON_KEY_FRAME_TIME, 1);
+    //     int width = JsonUtils.getIntOrDefault(entry, JSON_KEY_WIDTH, 8);
 
 //        if (entry.has("color")) {
 //            String hexColor = entry.get(JSON_KEY_DEFAULT_COLOR).getAsString();
 //            return new EmojiMetadata(frameCount, frameTime, width, Integer.parseInt(hexColor, 16));
 //        }
 
-        return new EmojiMetadata(frameCount, frameTime, width);
-    }
+    //     return new EmojiMetadata(frameCount, frameTime, width);
+    // }
+
 
 
 }
