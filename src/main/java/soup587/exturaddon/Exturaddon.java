@@ -2,6 +2,7 @@ package soup587.exturaddon;
 
 import org.figuramc.figura.lua.FiguraAPIManager;
 import soup587.exturaddon.lua.KeyMappingAPI;
+import soup587.exturaddon.lua.ExturaddonAPI;
 import soup587.exturaddon.platform.Platform;
 
 import org.slf4j.Logger;
@@ -28,6 +29,8 @@ public class Exturaddon {
 
 	public static void onInitialize() {
 		FiguraAPIManager.WHITELISTED_CLASSES.add(KeyMappingAPI.class);
+		FiguraAPIManager.WHITELISTED_CLASSES.add(ExturaddonAPI.class);
+		FiguraAPIManager.API_GETTERS.put("exturaddon", r -> new ExturaddonAPI(r.owner));
 	}
 
 	static Platform xplat() {
