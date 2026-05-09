@@ -34,7 +34,7 @@ public class GameRendererMixin {
 			//? if < 1.20.2 {
 				/*tickDelta
 			*///?} else
-				tickDelta.getRealtimeDeltaTicks()
+				tickDelta.getGameTimeDeltaPartialTick(true)
 		));
 	}
 

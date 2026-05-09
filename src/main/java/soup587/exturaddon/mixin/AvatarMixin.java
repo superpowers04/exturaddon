@@ -1,5 +1,6 @@
 package soup587.exturaddon.mixin;
 
+import com.moulberry.mixinconstraints.annotations.IfModAbsent;
 import net.minecraft.world.entity.EntityType;
 import org.figuramc.figura.avatar.Avatar;
 import org.figuramc.figura.lua.FiguraLuaRuntime;
@@ -43,12 +44,14 @@ public abstract class AvatarMixin implements AvatarAccessor {
 	public Avatar.Instructions preRender;
 
 	@Inject(method = "<init>(Ljava/util/UUID;)V", at = @At("TAIL"))
+	@IfModAbsent(value = "extura")
 	private void constructor(UUID owner, CallbackInfo ci) {
 		this.preRender = new Avatar.Instructions(permissions.get(Permissions.RENDER_INST));
 		customInstructions.putIfAbsent("preRender", this.preRender);
 	}
 
 	@Unique
+	@IfModAbsent(value = "extura")
 	public void extura$preRenderEvent(float delta) {
 		if (loaded && luaRuntime != null && luaRuntime.getUser() != null)
 			exturaddon$invokeRun("PRE_RENDER", preRender, delta, renderMode.name());
