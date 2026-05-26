@@ -10,8 +10,9 @@
 
   "plugin": "com.moulberry.mixinconstraints.ConstraintsMixinPlugin",
   "client": [
+    "backend2.HttpAPIMixin",
+    "backend2.WebsocketMixin",
     "lua.LuaTypeManagerMixin",
-    "lua.HostAPIMixin",
     "lua.RendererAPIMixin",
     "render.LevelRendererMixin",
     "render.GuiMixin"
