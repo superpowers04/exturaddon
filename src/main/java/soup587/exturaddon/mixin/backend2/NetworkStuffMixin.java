@@ -14,7 +14,7 @@ public class NetworkStuffMixin {
 
 	@Inject(at = @At("HEAD"), method="uploadAvatar", cancellable = true)
 	private static void uploadAvatar(Avatar avatar, CallbackInfo ci){
-		if(!((AvatarAccessor)avatar).extura$uploadEvent()){
+		if(((AvatarAccessor)avatar).extura$uploadEvent()){
 			ci.cancel();
 		}
 	}
