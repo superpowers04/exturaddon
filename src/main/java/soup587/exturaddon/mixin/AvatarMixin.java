@@ -41,7 +41,7 @@ public abstract class AvatarMixin implements AvatarAccessor {
 	@Invoker("run")
 	abstract Varargs exturaddon$invokeRun(Object toRun, Avatar.Instructions limit, Object... args);
 
-	public Avatar.Instructions preRender;
+	public Avatar.Instructions preRender, init;
 
 	@Inject(method = "<init>(Ljava/util/UUID;)V", at = @At("TAIL"))
 	@IfModAbsent(value = "extura")
@@ -50,10 +50,30 @@ public abstract class AvatarMixin implements AvatarAccessor {
 		customInstructions.putIfAbsent("preRender", this.preRender);
 	}
 
+
+	@Unique
+	private boolean isCancelled(Varargs args) {
+		if (args == null)
+			return false;
+		int l = args.narg();
+		int i = 0;
+		while (++i <= l) {
+			if (args.arg(i).isboolean() && args.arg(i).checkboolean())
+				return true;
+		}
+		return false;
+	}
+
+
 	@Unique
 	@IfModAbsent(value = "extura")
 	public void extura$preRenderEvent(float delta) {
 		if (loaded && luaRuntime != null && luaRuntime.getUser() != null)
 			exturaddon$invokeRun("PRE_RENDER", preRender, delta, renderMode.name());
+	}
+	@Unique
+	@IfModAbsent(value = "extura")
+	public boolean extura$uploadEvent() { // String type, boolean backend, boolean fsb
+		return isCancelled(exturaddon$invokeRun("UPLOAD", this.init));
 	}
 }

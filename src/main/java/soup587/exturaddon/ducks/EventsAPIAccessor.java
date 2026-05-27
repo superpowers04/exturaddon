@@ -4,4 +4,5 @@ import org.figuramc.figura.lua.api.event.LuaEvent;
 
 public interface EventsAPIAccessor {
 	LuaEvent extura$getPreRenderEvent();
+	LuaEvent extura$getUploadEvent();
 }
