@@ -22,15 +22,24 @@ public class EventsAPIMixin implements EventsAPIAccessor {
 	@LuaWhitelist
 	@LuaFieldDoc("events.pre_render")
 	public LuaEvent PRE_RENDER = new LuaEvent();
-	
+
+	@LuaWhitelist
+	@LuaFieldDoc("events.upload")
+	public LuaEvent UPLOAD = new LuaEvent();
+
 
 	@Inject(method = "<init>", at = @At(value = "INVOKE", target = "Ljava/util/Map;put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;"))
 	void addEvents(CallbackInfo ci) {
+
 		events.put("PRE_RENDER", PRE_RENDER);
+		events.put("UPLOAD", UPLOAD);
 	}
 
 	public LuaEvent extura$getPreRenderEvent() {
 		return PRE_RENDER;
+	}
+	public LuaEvent extura$getUploadEvent() {
+		return UPLOAD;
 	}
 
 }
