@@ -5,6 +5,7 @@ import soup587.exturaddon.Exturaddon;
 import com.mojang.brigadier.StringReader;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.resolver.ServerAddress;
 //? if > 1.20.2 {
 import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.client.multiplayer.ServerData;
@@ -44,6 +45,7 @@ import org.figuramc.figura.math.vector.FiguraVec3;
 import org.figuramc.figura.mixin.input.KeyMappingAccessor;
 import org.figuramc.figura.utils.LuaUtils;
 import org.figuramc.figura.utils.PlatformUtils;
+import org.figuramc.figura.config.*;
 
 import org.luaj.vm2.LuaError;
 import org.spongepowered.asm.mixin.Final;
@@ -54,6 +56,7 @@ import soup587.exturaddon.lua.KeyMappingAPI;
 import soup587.exturaddon.lua.NotImplementedLuaError;
 import soup587.exturaddon.overrides.ExturaInput;
 
+import soup587.exturaddon.config.ConfigExtensions;
 import soup587.exturaddon.overrides.NoInput;
 import soup587.exturaddon.mixin.backend2.HttpAPIMixin;
 
@@ -592,12 +595,20 @@ public class ExturaddonAPI {
 	@LuaWhitelist
 	@LuaMethodDoc("extura.get_backend_address")
 	public static String getBackendAddress() {
-		return NetworkStuff.isConnected() ? HttpAPIMixin.actuallyGetBackendAddress() : "" ;
+		return NetworkStuff.isConnected() ? actuallyGetBackendAddress() : "" ;
 	}
 
 
 
-
+	public static String actuallyGetBackendAddress(){
+		if(ConfigExtensions.BLOCK_CLOUD.value) return "http://127.0.0.1:9/api";
+        if(ConfigExtensions.VANILLA_CLOUD.value){
+            return "https://" + ServerAddress.parseString(Configs.SERVER_IP.defaultValue).getHost() + "/api";
+        }
+        String backendIP = ConfigExtensions.USE_MC_HOST_RESOLVER.value ? ServerAddress.parseString(Configs.SERVER_IP.value).getHost() : Configs.SERVER_IP.value;
+        if(ConfigExtensions.USE_SECURE_CLOUD.value) return "https://" + backendIP + "/api";
+        return "http://" + backendIP + "/api";
+	}
 	@LuaWhitelist
 	public Object __index(String arg) {
 		return switch (arg.toLowerCase()) {
