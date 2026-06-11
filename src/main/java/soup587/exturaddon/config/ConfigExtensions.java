@@ -3,7 +3,7 @@ package soup587.exturaddon.config;
 import net.minecraft.ChatFormatting;
 import org.figuramc.figura.backend2.NetworkStuff;
 import org.figuramc.figura.config.*;
-import org.figuramc.figura.utils.FiguraText;
+import soup587.exturaddon.utils.Exturlatable;
 
 import static org.figuramc.figura.config.Configs.SERVER_IP;
 
@@ -18,7 +18,7 @@ public class ConfigExtensions {
 			}
 			{
 				this.name = this.name.copy().withStyle(ChatFormatting.RED);
-				this.tooltip = FiguraText.of("config.use_secure_cloud.tooltip");
+				this.tooltip = Exturlatable.of("config.use_secure_cloud.tooltip");
 			}
 		};
 	public static final ConfigType.BoolConfig BLOCK_CLOUD = new ConfigType.BoolConfig("block_cloud", EXTURA_NETWORKING, false) {
@@ -29,7 +29,7 @@ public class ConfigExtensions {
 		}
 		{
 			this.name = this.name.copy().withStyle(ChatFormatting.RED);
-			this.tooltip = FiguraText.of("config.block_cloud.tooltip",SERVER_IP.defaultValue);
+			this.tooltip = Exturlatable.of("config.block_cloud.tooltip",SERVER_IP.defaultValue);
 		}
 	};
 	public static final ConfigType.BoolConfig VANILLA_CLOUD = new ConfigType.BoolConfig("vanilla_cloud", EXTURA_NETWORKING, false) {
@@ -40,7 +40,7 @@ public class ConfigExtensions {
 		}
 		{
 			this.name = this.name.copy().withStyle(ChatFormatting.RED);
-			this.tooltip = FiguraText.of("config.vanilla_cloud.tooltip");
+			this.tooltip = Exturlatable.of("config.vanilla_cloud.tooltip");
 		}
 	};
 	public static final ConfigType.BoolConfig USE_MC_HOST_RESOLVER = new ConfigType.BoolConfig("use_mc_host_resolver", EXTURA_NETWORKING, true) {
@@ -51,7 +51,10 @@ public class ConfigExtensions {
 		}
 		{
 			this.name = this.name.copy();
-			this.tooltip = FiguraText.of("config.use_mc_host_resolver.tooltip");
+			this.tooltip = Exturlatable.of("config.use_mc_host_resolver.tooltip");
 		}
 	};
+	public static void init() {
+		// We do this to force the above config stuff to be registered
+	}
 }

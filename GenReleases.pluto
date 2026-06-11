@@ -1,0 +1,20 @@
+os.execute('./gradlew build --no-daemon')
+pcall(io.remove,'JARS')
+pcall(io.mkdir,'JARS')
+local ver_folder,libs_folder = "./versions/","/build/libs/"
+for _,version in io.listdir(ver_folder) do
+	local path = $'{version}{libs_folder}'
+	-- print(path)
+	if not io.exists(path) then continue end
+	local queued_jar = ""
+	for __,jar in io.listdir(path) do
+		if queued_jar > jar or not jar:find('%+[^-]+%-[^-]+%.jar') then continue end
+		queued_jar = jar
+	end
+	if queued_jar == "" then continue end
+	local export_jar = ('./JARS/exturaddon-%s.jar'):format(queued_jar:match('%+([^-]+%-[^-]+)%.jar'))
+	print($'{queued_jar} -> {export_jar}')
+	io.copy(queued_jar,export_jar)
+end
+
+
