@@ -23,7 +23,7 @@ public class HttpAPIMixin {
 		cir.setReturnValue(actuallyGetBackendAddress());
     }
 	@Unique
-	private static String actuallyGetBackendAddress(){
+	public static String actuallyGetBackendAddress(){
 		if(ConfigExtensions.BLOCK_CLOUD.value) return "http://127.0.0.1:9/api";
         if(ConfigExtensions.VANILLA_CLOUD.value){
             return "https://" + ServerAddress.parseString(Configs.SERVER_IP.defaultValue).getHost() + "/api";

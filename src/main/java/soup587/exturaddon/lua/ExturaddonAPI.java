@@ -1,5 +1,7 @@
 package soup587.exturaddon.lua;
 
+
+import soup587.exturaddon.Exturaddon;
 import com.mojang.brigadier.StringReader;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
@@ -27,6 +29,7 @@ import org.figuramc.figura.avatar.AvatarManager;
 import org.figuramc.figura.avatar.local.LocalAvatarFetcher;
 import org.figuramc.figura.avatar.local.LocalAvatarLoader;
 import org.figuramc.figura.backend2.NetworkStuff;
+import org.figuramc.figura.backend2.HttpAPI;
 import org.figuramc.figura.gui.widgets.lists.AvatarList;
 import org.figuramc.figura.lua.LuaNotNil;
 import org.figuramc.figura.lua.LuaWhitelist;
@@ -34,11 +37,14 @@ import org.figuramc.figura.lua.api.HostAPI;
 import org.figuramc.figura.lua.api.entity.EntityAPI;
 import org.figuramc.figura.lua.api.world.BlockStateAPI;
 import org.figuramc.figura.lua.docs.LuaMethodDoc;
+import org.figuramc.figura.lua.docs.LuaTypeDoc;
 import org.figuramc.figura.lua.docs.LuaMethodOverload;
 import org.figuramc.figura.math.vector.FiguraVec2;
 import org.figuramc.figura.math.vector.FiguraVec3;
 import org.figuramc.figura.mixin.input.KeyMappingAccessor;
 import org.figuramc.figura.utils.LuaUtils;
+import org.figuramc.figura.utils.PlatformUtils;
+
 import org.luaj.vm2.LuaError;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -47,7 +53,9 @@ import soup587.exturaddon.ExturaPermissions;
 import soup587.exturaddon.lua.KeyMappingAPI;
 import soup587.exturaddon.lua.NotImplementedLuaError;
 import soup587.exturaddon.overrides.ExturaInput;
+
 import soup587.exturaddon.overrides.NoInput;
+import soup587.exturaddon.mixin.backend2.HttpAPIMixin;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -58,6 +66,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @LuaWhitelist
+@LuaTypeDoc(name = "ExturaddonAPI", value = "exturaddon")
 public class ExturaddonAPI {
 
 	private Avatar owner;
@@ -530,5 +539,80 @@ public class ExturaddonAPI {
 			throw new LuaError("Failed to find key: \"" + id + "\"");
 		key.setDown(state);
 		key.clickCount += 1;
+	}
+
+/*	@LuaWhitelist
+	@LuaMethodDoc("extura.get_nameplate")
+	public String getNameplate(EntityAPI entity, String type) {
+		entity.checkEntity();
+		Avatar avi = AvatarManager.getAvatar(entity.entity);
+		if(avi == null || avi.luaRuntime == null) return null;
+		switch(type.toUpperCase()){
+			case "ENTITY": return avi.luaRuntime.nameplate.ENTITY.getText();
+			case "LIST": return avi.luaRuntime.nameplate.LIST.getText();
+			case "CHAT": return avi.luaRuntime.nameplate.CHAT.getText();
+			default: return null;
+		}
+	}*/
+/*	@LuaWhitelist
+	@LuaMethodDoc(
+			overloads = {
+					// @LuaMethodOverload(argumentTypes = String.class, argumentNames = "Avatar Owner"),
+					@LuaMethodOverload(argumentTypes = EntityAPI.class, argumentNames = "Avatar Owner")
+			},
+			value = "extura.get_nameplate")
+	public LuaTable getNameplate(EntityAPI entity_api) {
+		if(!this.isHost) return;
+		Entity entity;
+		if(playerUUID instanceof EntityAPI){
+			entity = entity_api.getEntity();
+		// }else if(playerUUID instanceof String){
+		// 	uuid = UUID.fromString((String) playerUUID);
+		}else{
+			throw new LuaError("bad argument #1 to 'getNameplate' (entity expected)");
+		}
+		Avatar avi = AvatarManager.getAvatar(entity);
+		if(avi == null || avi.luaRuntime == null) return null;
+
+		LuaTable table = new LuaTable();
+		table.rawset(LuaString.valueOf(), avi.luaRuntime.nameplate.ENTITY.getText());
+		return table;
+	}*/
+
+	@LuaWhitelist
+	@LuaMethodDoc("extura.is_backend_connected")
+	public static boolean isBackendConnected() {
+		return NetworkStuff.isConnected();
+	}
+	// @LuaWhitelist
+	// @LuaMethodDoc("extura.get_mod_name")
+	// public static String getModName(@LuaNotNil String id) {
+	// 	return PlatformUtils.isModLoaded(id) ? PlatformUtils.getModName(id) : "";
+	// }
+	@LuaWhitelist
+	@LuaMethodDoc("extura.get_backend_address")
+	public static String getBackendAddress() {
+		return NetworkStuff.isConnected() ? HttpAPIMixin.actuallyGetBackendAddress() : "" ;
+	}
+
+
+
+
+	@LuaWhitelist
+	public Object __index(String arg) {
+		return switch (arg.toLowerCase()) {
+			case "version" -> Exturaddon.MOD_VERSION;
+			default -> null;
+		};
+	}
+
+	@LuaWhitelist
+	public void __newindex(@LuaNotNil String key) {
+		throw new LuaError("Cannot assign value on key \"" + key + "\"");
+	}
+
+	@Override
+	public String toString() {
+		return "ExturaAPI";
 	}
 }
