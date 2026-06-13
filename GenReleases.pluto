@@ -1,4 +1,7 @@
-os.execute('./gradlew build --no-daemon')
+if not os.execute('./gradlew build --no-daemon') then
+	print('Build not successful, Exiting!')
+	return
+end
 pcall(io.remove,'JARS')
 pcall(io.mkdir,'JARS')
 local ver_folder,libs_folder = "./versions/","/build/libs/"
