@@ -39,10 +39,6 @@ public class RendererAPIMixin implements RendererAPIAccessor {
 	public boolean renderGUI = true;
 	@LuaFieldDoc("renderer.render_first_person")
 	public boolean renderFirstPerson;
-	@LuaFieldDoc("renderer.render_left_arm")
-	public boolean renderLeftArm;
-	@LuaFieldDoc("renderer.render_right_arm")
-	public boolean renderRightArm;
 	@LuaFieldDoc("renderer.render_left_item")
 	public boolean renderLeftItem;
 	@LuaFieldDoc("renderer.render_right_item")
@@ -100,16 +96,6 @@ public class RendererAPIMixin implements RendererAPIAccessor {
 	@LuaMethodDoc("renderer.should_render_right_item")
 	public boolean shouldRenderRightItem() {
 		return renderRightItem;
-	}
-	@LuaWhitelist
-	@LuaMethodDoc("renderer.should_render_left_arm")
-	public boolean shouldRenderLeftArm() {
-		return renderLeftArm;
-	}
-	@LuaWhitelist
-	@LuaMethodDoc("renderer.should_render_right_arm")
-	public boolean shouldRenderRightArm() {
-		return renderRightArm;
 	}
 	@LuaWhitelist
 	@LuaMethodDoc("renderer.should_render_first_person")
@@ -180,55 +166,7 @@ public class RendererAPIMixin implements RendererAPIAccessor {
 	}
 
 
-	@LuaWhitelist
-	@LuaMethodDoc(
-			overloads = @LuaMethodOverload(
-					argumentTypes = Boolean.class,
-					argumentNames = "bool"
-			),
-			aliases = "renderLeftArm",
-			value = "renderer.set_render_left_arm"
-	)
-	public RendererAPI setRenderLeftArm(Boolean bool) {
-		this.renderLeftArm = bool;
-		return (RendererAPI)(Object) this;
-	}
 
-	@LuaWhitelist
-	public RendererAPI renderLeftArm(Boolean bool) {
-		return setRenderLeftArm(bool);
-	}
-
-	@LuaWhitelist
-	@LuaMethodDoc("renderer.get_render_left_arm")
-	public Boolean getRenderLeftArm() {
-		return this.renderLeftArm;
-	}
-
-	@LuaWhitelist
-	@LuaMethodDoc(
-			overloads = @LuaMethodOverload(
-					argumentTypes = Boolean.class,
-					argumentNames = "bool"
-			),
-			aliases = "renderRightArm",
-			value = "renderer.set_render_right_arm"
-	)
-	public RendererAPI setRenderRightArm(Boolean bool) {
-		this.renderRightArm = bool;
-		return (RendererAPI)(Object)this;
-	}
-
-	@LuaWhitelist
-	public RendererAPI renderRightArm(Boolean bool) {
-		return setRenderRightArm(bool);
-	}
-
-	@LuaWhitelist
-	@LuaMethodDoc("renderer.get_render_right_arm")
-	public Boolean getRenderRightArm() {
-		return renderRightArm;
-	}
 
 
 
@@ -243,10 +181,6 @@ public class RendererAPIMixin implements RendererAPIAccessor {
 			case "renderEffects" -> renderEffects;
 			case "renderGUI" -> renderGUI;
 			case "renderFirstPerson" -> renderFirstPerson;
-			case "renderLeftItem" -> renderLeftItem;
-			case "renderRightItem" -> renderRightItem;
-			case "renderLeftArm" -> renderLeftArm;
-			case "renderRightArm" -> renderRightArm;
 			default -> null;
 		});
 		if (returnr != null) cir.setReturnValue(returnr);
