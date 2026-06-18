@@ -1,3 +1,9 @@
+
+
+io.contents('./gradle.properties',io.contents('./gradle.properties'):gsub('mod%.version ?= ?.-\n', function()
+	local t = os.date('%y.%m.%d')
+	return $'mod.version = {t}\n'
+end))
 if not os.execute('./gradlew build --no-daemon') then
 	print('Build not successful, Exiting!')
 	return
@@ -19,5 +25,3 @@ for _,version in io.listdir(ver_folder) do
 	print($'{queued_jar} -> {export_jar}')
 	io.copy(queued_jar,export_jar)
 end
-
-

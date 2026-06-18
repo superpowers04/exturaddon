@@ -13,9 +13,11 @@ logoFile = "assets/icon.png"
 authors = "${authors}"
 logoBlur = false
 credits = "${contributors}"
+side="CLIENT"
 
 description = '''${description}'''
 
 [[mixins]]
 config = "${id}.mixins.json"
+side="CLIENT"
 ${dependencies}
