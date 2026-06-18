@@ -7,6 +7,7 @@ import soup587.exturaddon.platform.Platform;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import java.nio.file.Path;
 
 //? fabric {
 	import soup587.exturaddon.platform.fabric.FabricPlatform;
@@ -24,6 +25,9 @@ public class Exturaddon {
 	public static final String MOD_VERSION = /*$ mod_version*/ "0.1.0";
 	public static final String MOD_FRIENDLY_NAME = /*$ mod_name*/ "Exturaddon";
 	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
+
+	public static Path cachedPath;
+	public static Path cachedConfigPath;
 
 	private static final Platform PLATFORM = createPlatformInstance();
 

@@ -3,15 +3,13 @@ import org.figuramc.figura.lua.LuaNotNil;
 import org.figuramc.figura.lua.LuaTypeManager;
 import org.figuramc.figura.lua.docs.FiguraDocsManager;
 import org.luaj.vm2.*;
-import org.luaj.vm2.lib.OneArgFunction;
-import org.luaj.vm2.lib.TwoArgFunction;
 import org.luaj.vm2.lib.VarArgFunction;
 
+import static java.util.Map.entry;
+import static org.luaj.vm2.LuaValue.*;
+
 import java.lang.reflect.*;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class LuaTypeFunctions {
     public static boolean[] getRequiredNotNil(Method method) {
@@ -66,12 +64,32 @@ public class LuaTypeFunctions {
             try {
                 caller = args.checkuserdata(1, clazz);
             } catch (LuaError e) {
-                String methodName = method.getName();
-                String targetType = typeManager.getTypeName(clazz);
-                throw new LuaError(String.format(
-                        "Use a colon (:) to call %s on a %s, instead of a dot.\nFor example, change .%s( to :%s(",
-                        methodName, targetType, methodName, methodName
-                ));
+	            String methodName = method.getName();
+	            String targetType = typeManager.getTypeName(clazz);
+				if (OPERATORS.containsKey(methodName)) {
+	                String typeName = (args.isuserdata(1) ? FiguraDocsManager.getNameFor(args.checkuserdata(1).getClass()) : args.arg1().typename() );
+
+	                OperatorInfo operator = OPERATORS.get(methodName);
+	                if (operator.binary) throw new LuaError(String.format(
+	                        "Expected left-hand side of %s to be a %s; actually got %s",
+	                        operator.name,
+	                        targetType,
+	                        typeName
+	                ));
+	                else throw new LuaError(String.format(
+	                        "Expected subject of %s to be a %s; actually got %s",
+	                        operator.name,
+	                        targetType,
+	                        typeName
+	                ));
+	            }
+	            throw new LuaError(String.format(
+	                    "Use a colon (:) to call %s on a %s, instead of a dot.\nFor example, change .%s( to :%s(",
+	                    methodName,
+	                    targetType,
+	                    methodName,
+	                    methodName
+	            ));
             }
         }
         @Override
@@ -158,4 +176,25 @@ public class LuaTypeFunctions {
             return invokeMethod(caller, actualArgs);
         }
     }
+
+    private record OperatorInfo(String name, boolean binary) {}
+
+    private static final Map<String, OperatorInfo> OPERATORS = Map.ofEntries(
+            entry(INDEX.tojstring(), new OperatorInfo("indexing", true)),
+            entry(NEWINDEX.tojstring(), new OperatorInfo("indexing", true)),
+            entry(CALL.tojstring(), new OperatorInfo("function call", false)),
+            entry(ADD.tojstring(), new OperatorInfo("+", true)),
+            entry(SUB.tojstring(), new OperatorInfo("-", true)),
+            entry(DIV.tojstring(), new OperatorInfo("/", true)),
+            entry(MUL.tojstring(), new OperatorInfo("*", true)),
+            entry(POW.tojstring(), new OperatorInfo("^", true)),
+            entry(MOD.tojstring(), new OperatorInfo("%", true)),
+            entry(UNM.tojstring(), new OperatorInfo("-", false)),
+            entry(LEN.tojstring(), new OperatorInfo("#", false)),
+            entry(EQ.tojstring(), new OperatorInfo("==", true)),
+            entry(LT.tojstring(), new OperatorInfo("<", true)),
+            entry(LE.tojstring(), new OperatorInfo("<=", true)),
+            entry(TOSTRING.tojstring(), new OperatorInfo("tostring", false)),
+            entry(CONCAT.tojstring(), new OperatorInfo("..", true))
+    );
 }

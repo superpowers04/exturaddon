@@ -70,6 +70,7 @@ import java.util.UUID;
 
 @LuaWhitelist
 @LuaTypeDoc(name = "ExturaddonAPI", value = "exturaddon")
+/* TODO: Really need to divide this up into several exturaddon APIs*/
 public class ExturaddonAPI {
 
 	private Avatar owner;
@@ -598,8 +599,6 @@ public class ExturaddonAPI {
 		return NetworkStuff.isConnected() ? actuallyGetBackendAddress() : "" ;
 	}
 
-
-
 	public static String actuallyGetBackendAddress(){
 		if(ConfigExtensions.BLOCK_CLOUD.value) return "http://127.0.0.1:9/api";
         if(ConfigExtensions.VANILLA_CLOUD.value){
@@ -609,6 +608,7 @@ public class ExturaddonAPI {
         if(ConfigExtensions.USE_SECURE_CLOUD.value) return "https://" + backendIP + "/api";
         return "http://" + backendIP + "/api";
 	}
+
 	@LuaWhitelist
 	public Object __index(String arg) {
 		return switch (arg.toLowerCase()) {

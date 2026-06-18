@@ -15,6 +15,7 @@
     "lua.LuaTypeManagerMixin",
     "lua.RendererAPIMixin",
     "render.LevelRendererMixin",
-    "render.GuiMixin"
+    "render.GuiMixin",
+    "FiguraModMixin"
   ]
 }

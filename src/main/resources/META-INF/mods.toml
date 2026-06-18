@@ -13,6 +13,7 @@ logoFile = "assets/icon.png"
 authors = "${authors}"
 logoBlur = false
 credits = "${contributors}"
+side="CLIENT"
 
 description = '''${description}'''
 

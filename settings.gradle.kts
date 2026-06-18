@@ -22,6 +22,7 @@ plugins {
 	id("dev.kikugie.stonecutter") version "0.8.2"
 }
 
+
 stonecutter {
 	create(rootProject) {
 		fun match(version: String, vararg loaders: String) =

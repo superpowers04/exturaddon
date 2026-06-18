@@ -35,6 +35,7 @@ stonecutter tasks {
 stonecutter parameters {
 	constants.match(node.metadata.project.substringAfterLast('-'), "fabric", "neoforge", "forge")
 	filters.include("**/*.fsh", "**/*.vsh")
+
 	swaps["mod_version"] = "\"" + property("mod.version") + "\";"
 	swaps["mod_id"] = "\"" + property("mod.id") + "\";"
 	swaps["mod_name"] = "\"" + property("mod.name") + "\";"

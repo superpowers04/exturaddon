@@ -39,11 +39,6 @@ public class RendererAPIMixin implements RendererAPIAccessor {
 	public boolean renderGUI = true;
 	@LuaFieldDoc("renderer.render_first_person")
 	public boolean renderFirstPerson;
-	@LuaFieldDoc("renderer.render_left_item")
-	public boolean renderLeftItem;
-	@LuaFieldDoc("renderer.render_right_item")
-	public boolean renderRightItem;
-
 
 	@LuaWhitelist
 	@LuaMethodDoc("renderer.should_render_player_health")
@@ -88,16 +83,6 @@ public class RendererAPIMixin implements RendererAPIAccessor {
 	}
 
 	@LuaWhitelist
-	@LuaMethodDoc("renderer.should_render_left_item")
-	public boolean shouldRenderLeftItem() {
-		return renderLeftItem;
-	}
-	@LuaWhitelist
-	@LuaMethodDoc("renderer.should_render_right_item")
-	public boolean shouldRenderRightItem() {
-		return renderRightItem;
-	}
-	@LuaWhitelist
 	@LuaMethodDoc("renderer.should_render_first_person")
 	public boolean shouldRenderFirstPerson() {
 		return renderFirstPerson;
@@ -126,45 +111,6 @@ public class RendererAPIMixin implements RendererAPIAccessor {
 		//?} else
 		//return Minecraft.getInstance().getDeltaTracker().getRealtimeDeltaTicks();
 	}
-
-	@LuaWhitelist
-	@LuaMethodDoc(
-			overloads = @LuaMethodOverload(
-					argumentTypes = Boolean.class,
-					argumentNames = "bool"
-			),
-			aliases = "renderLeftItem",
-			value = "renderer.set_render_left_item"
-	)
-	public RendererAPI setRenderLeftItem(Boolean bool) {
-		this.renderLeftItem = bool;
-		return (RendererAPI)(Object)this;
-	}
-
-	@LuaWhitelist
-	public RendererAPI renderLeftItem(Boolean bool) {
-		return setRenderLeftItem(bool);
-	}
-
-	@LuaWhitelist
-	@LuaMethodDoc(
-			overloads = @LuaMethodOverload(
-					argumentTypes = Boolean.class,
-					argumentNames = "bool"
-			),
-			aliases = "renderRightItem",
-			value = "renderer.set_render_right_item"
-	)
-	public RendererAPI setRenderRightItem(Boolean bool) {
-		this.renderRightItem = bool;
-		return (RendererAPI)(Object)this;
-	}
-
-	@LuaWhitelist
-	public RendererAPI renderRightItem(Boolean bool) {
-		return setRenderRightItem(bool);
-	}
-
 
 
 
