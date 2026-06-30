@@ -1,9 +1,10 @@
-package soup587.exturaddon.mixin;
+package soup587.exturaddon.mixin.avatar;
 
 import com.moulberry.mixinconstraints.annotations.IfModAbsent;
 import net.minecraft.world.entity.EntityType;
 import org.figuramc.figura.avatar.Avatar;
 import org.figuramc.figura.lua.FiguraLuaRuntime;
+import org.figuramc.figura.lua.api.entity.EntityAPI;
 import org.figuramc.figura.model.rendering.EntityRenderMode;
 import org.figuramc.figura.permissions.PermissionPack;
 import org.figuramc.figura.permissions.Permissions;
@@ -41,7 +42,7 @@ public abstract class AvatarMixin implements AvatarAccessor {
 	@Invoker("run")
 	abstract Varargs exturaddon$invokeRun(Object toRun, Avatar.Instructions limit, Object... args);
 
-	public Avatar.Instructions preRender, init;
+	public Avatar.Instructions preRender, init, tick;
 
 	@Inject(method = "<init>(Ljava/util/UUID;)V", at = @At("TAIL"))
 	@IfModAbsent(value = "extura")
@@ -75,5 +76,18 @@ public abstract class AvatarMixin implements AvatarAccessor {
 	@IfModAbsent(value = "extura")
 	public boolean extura$uploadEvent() { // String type, boolean backend, boolean fsb
 		return isCancelled(exturaddon$invokeRun("UPLOAD", this.init));
+	}
+
+	@Unique
+	@IfModAbsent(value = "extura")
+	public void extura$handleEntityEventEvent(byte id) {
+		if (loaded && luaRuntime != null && luaRuntime.getUser() != null)
+			exturaddon$invokeRun("HANDLE_ENTITY_EVENT", this.tick, id);
+	}
+	@Unique
+	@IfModAbsent(value = "extura")
+	public void extura$interactEvent(String event, @Nullable EntityAPI entity) { 
+		if (loaded && luaRuntime != null && luaRuntime.getUser() != null)
+			exturaddon$invokeRun("INTERACT", this.tick, event, entity);
 	}
 }

@@ -8,7 +8,7 @@ import soup587.exturaddon.utils.Exturlatable;
 import static org.figuramc.figura.config.Configs.SERVER_IP;
 
 public class ConfigExtensions {
-	public static final ConfigType.Category EXTURA_NETWORKING = new ConfigType.Category("Extura - Networking");
+	public static final ConfigType.Category EXTURA_NETWORKING = new ConfigType.Category("extura.networking");
 
 	public static final ConfigType.BoolConfig USE_SECURE_CLOUD = new ConfigType.BoolConfig("use_secure_cloud", EXTURA_NETWORKING, true) {
 			@Override

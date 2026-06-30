@@ -27,12 +27,21 @@ public class EventsAPIMixin implements EventsAPIAccessor {
 	@LuaFieldDoc("events.upload")
 	public LuaEvent UPLOAD = new LuaEvent();
 
+	@LuaWhitelist
+	@LuaFieldDoc("events.handle_entity_event")
+	public LuaEvent HANDLE_ENTITY_EVENT = new LuaEvent();
+
+	@LuaWhitelist
+	@LuaFieldDoc("events.interact")
+	public LuaEvent INTERACT = new LuaEvent();
+
 
 	@Inject(method = "<init>", at = @At(value = "INVOKE", target = "Ljava/util/Map;put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;"))
 	void addEvents(CallbackInfo ci) {
-
 		events.put("PRE_RENDER", PRE_RENDER);
 		events.put("UPLOAD", UPLOAD);
+		events.put("HANDLE_ENTITY_EVENT", HANDLE_ENTITY_EVENT);
+		events.put("INTERACT", INTERACT);
 	}
 
 	public LuaEvent extura$getPreRenderEvent() {
@@ -40,6 +49,12 @@ public class EventsAPIMixin implements EventsAPIAccessor {
 	}
 	public LuaEvent extura$getUploadEvent() {
 		return UPLOAD;
+	}
+	public LuaEvent extura$getHandleEntityEvent() {
+		return HANDLE_ENTITY_EVENT;
+	}
+	public LuaEvent extura$getInteractEvent() {
+		return INTERACT;
 	}
 
 }
