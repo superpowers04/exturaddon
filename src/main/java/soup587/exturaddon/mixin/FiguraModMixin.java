@@ -23,14 +23,7 @@ public class FiguraModMixin {
 		String config = Configs.MAIN_DIR.value;
 		if(!config.isBlank()) return Exturaddon.cachedPath = IOUtils.createDirIfNeeded(Path.of(config.toString()));
 		Path p = FiguraMod.GAME_DIR.resolve(FiguraMod.MOD_ID);
-		// int indexOfInstances = p.toAbsolutePath().toString().lastIndexOf("instances");
-		
-		// if(indexOfInstances != -1){
-		// 	Path p2 = Path.of(p.toAbsolutePath().toString().substring(0,indexOfInstances)).resolve(MOD_ID);
-		// 	if(Files.exists(p2)){
-		// 		return cachedPath = p2;
-		// 	}
-		// }
+
 		return Exturaddon.cachedPath = IOUtils.createDirIfNeeded(p);
 	}
 	// @Inject(at=@At("HEAD"), method="getWrapper", cancellable = true)

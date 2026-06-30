@@ -80,6 +80,7 @@ public class ExturaddonAPI {
 	private static Input defaultInput;
 	//? }
 
+
 	public ExturaddonAPI(Avatar owner) {
 		//? if < 1.21.2 {
 			defaultInput = null;
@@ -488,34 +489,6 @@ public class ExturaddonAPI {
 		LocalPlayer player = this.minecraft.player;
 		if (player == null) return;
 		player.setDiscardFriction(hasForce != true);
-	}
-
-	@LuaWhitelist
-	@LuaMethodDoc(
-			overloads = {
-					@LuaMethodOverload(
-							argumentTypes = {BlockStateAPI.class, FiguraVec3.class},
-							argumentNames = {"block", "pos"}
-					),
-					@LuaMethodOverload(
-							argumentTypes = {BlockStateAPI.class, Double.class, Double.class, Double.class},
-							argumentNames = {"block", "x", "y", "z"}
-					)
-			},
-			value = "extura.set_block"
-	)
-	public Boolean setBlock(@LuaNotNil String string, Object x, Double y, Double z) {
-		if(!canExturaCheat()) return false;
-		BlockPos pos = LuaUtils.parseVec3("setBlock", x, y, z).asBlockPos();
-		try {
-			Level level = this.minecraft.level;
-			BlockState block = BlockStateArgument.block(CommandBuildContext.simple(level.registryAccess(), level.enabledFeatures())).parse(new StringReader(string)).getState();
-
-			level.setBlockAndUpdate(pos,block);
-			return true;
-		} catch (Exception e) {
-			return false;
-		}
 	}
 
 	@LuaWhitelist

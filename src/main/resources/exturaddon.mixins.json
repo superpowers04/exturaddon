@@ -14,8 +14,15 @@
     "backend2.WebsocketMixin",
     "lua.LuaTypeManagerMixin",
     "lua.RendererAPIMixin",
+    "lua.FiguraGlobalsDocsMixin",
+    "lua.FiguraDocsManagerMixin",
     "render.LevelRendererMixin",
     "render.GuiMixin",
+    "ConfigManagerMixin",
+    "avatar.AvatarMixin",
+    "avatar.LocalAvatarLoaderMixin",
+    "PlayerMixin",
+    "EntityMixin",
     "FiguraModMixin"
   ]
 }
