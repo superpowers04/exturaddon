@@ -21,6 +21,7 @@ import net.minecraft.core.GlobalPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.Pose;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
@@ -36,8 +37,10 @@ import org.figuramc.figura.lua.LuaNotNil;
 import org.figuramc.figura.lua.LuaWhitelist;
 import org.figuramc.figura.lua.api.HostAPI;
 import org.figuramc.figura.lua.api.entity.EntityAPI;
+import org.figuramc.figura.lua.api.entity.PlayerAPI;
 import org.figuramc.figura.lua.api.world.BlockStateAPI;
 import org.figuramc.figura.lua.docs.LuaMethodDoc;
+import org.figuramc.figura.lua.docs.LuaFieldDoc;
 import org.figuramc.figura.lua.docs.LuaTypeDoc;
 import org.figuramc.figura.lua.docs.LuaMethodOverload;
 import org.figuramc.figura.math.vector.FiguraVec2;
@@ -47,7 +50,10 @@ import org.figuramc.figura.utils.LuaUtils;
 import org.figuramc.figura.utils.PlatformUtils;
 import org.figuramc.figura.config.*;
 
+import org.luaj.vm2.LuaString;
 import org.luaj.vm2.LuaError;
+import org.luaj.vm2.LuaTable;
+import org.luaj.vm2.LuaValue;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -67,6 +73,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.List;
 
 @LuaWhitelist
 @LuaTypeDoc(name = "ExturaddonAPI", value = "exturaddon")
@@ -79,6 +86,8 @@ public class ExturaddonAPI {
 	//? if < 1.21.2 {
 	private static Input defaultInput;
 	//? }
+	private static final boolean HAS_CURIOS = PlatformUtils.isModLoaded("curios");
+
 
 
 	public ExturaddonAPI(Avatar owner) {
@@ -140,6 +149,7 @@ public class ExturaddonAPI {
 		return false;
 	}
 
+
 	@LuaWhitelist
 	@LuaMethodDoc("extura.upload_avatar")
 	public boolean uploadAvatar() {
@@ -186,7 +196,6 @@ public class ExturaddonAPI {
 		}else{
 			uuid = FiguraMod.getLocalPlayerUUID();
 		}
-		// (UUID != null && !UUID.isEmpty() ? UUID.fromString(UUID) : FiguraMod.getLocalPlayerUUID() )
 		AvatarManager.reloadAvatar(uuid);
 	}
 
@@ -491,6 +500,7 @@ public class ExturaddonAPI {
 		player.setDiscardFriction(hasForce != true);
 	}
 
+
 	@LuaWhitelist
 	@LuaMethodDoc("extura.get_key_mappings")
 	public Map<String, KeyMappingAPI<?>> getKeyMappings() {
@@ -504,6 +514,7 @@ public class ExturaddonAPI {
 		});
 		return mappingslist;
 	}
+
 
 	// borrowed this from vivecraft - jess
 
@@ -582,10 +593,62 @@ public class ExturaddonAPI {
         return "http://" + backendIP + "/api";
 	}
 
+
+
+	@LuaWhitelist
+	@LuaFieldDoc("extura.has_parcool")
+	private static boolean HAS_PARCOOL = PlatformUtils.isModLoaded("parcool");
+
+	private static Class<?> PARCOOL_ParkourAbility, PARCOOL_Action = null;
+	private static Method   PARCOOL_ParkourAbility_GetAbility, PARCOOL_ParkourAbility_GetActions, PARCOOL_Action_isDoing = null;
+	private static EReadOnlyLuaTable   parcool_actions = new EReadOnlyLuaTable();
+	
+	private static void loadParcool(){
+		if (PARCOOL_ParkourAbility != null) return;
+		if (!HAS_PARCOOL) throw new LuaError("Attempt to grab parcool when it's not installed!");
+		try{
+			PARCOOL_ParkourAbility = Class.forName("com.alrex.parcool.common.attachment.common.Parkourability");
+			PARCOOL_Action = Class.forName("com.alrex.parcool.common.action.Action");
+			PARCOOL_ParkourAbility_GetAbility = PARCOOL_ParkourAbility.getMethod("get", Class.forName("net.minecraft.world.entity.player.Player"));
+			PARCOOL_ParkourAbility_GetActions = PARCOOL_ParkourAbility.getMethod("getList");
+			PARCOOL_Action_isDoing = PARCOOL_Action.getMethod("isDoing");
+		}catch(Exception e){
+			throw new LuaError("Unable to load parcool:"+e.toString());
+		}
+	}
+	@LuaWhitelist
+	@LuaMethodDoc("extura.parcool_get_actions")
+	public LuaTable parcoolGetActions(PlayerAPI target_player_api) {
+		if(!HAS_PARCOOL) return parcool_actions;
+		loadParcool();
+		Player player = target_player_api.getEntity();
+		if (player == null) throw new LuaError("invalid player");
+		Object pa = null;
+		try{
+			pa = PARCOOL_ParkourAbility_GetAbility .invoke(PARCOOL_ParkourAbility, player);
+		}catch(Exception e){
+			throw new LuaError("Unable to grab player abilities:"+e.toString());
+		}
+		if (pa == null) throw new LuaError("invalid object returned by parcool!");
+		try{
+			for (Object action : (List<Object>) PARCOOL_ParkourAbility_GetActions.invoke(pa) ) {
+				parcool_actions.javaset(LuaString.valueOf(action.getClass().getSimpleName()), ((boolean) PARCOOL_Action_isDoing.invoke(action)) ? LuaValue.TRUE : LuaValue.FALSE);
+			}
+		}catch(Exception e){
+			throw new LuaError("Unable to grab actions:"+e.toString());
+		}
+
+		return parcool_actions;
+	}
+
+
+
+
 	@LuaWhitelist
 	public Object __index(String arg) {
 		return switch (arg.toLowerCase()) {
 			case "version" -> Exturaddon.MOD_VERSION;
+			case "hasParcool" -> HAS_PARCOOL;
 			default -> null;
 		};
 	}
