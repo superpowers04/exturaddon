@@ -17,6 +17,19 @@ side="CLIENT"
 
 description = '''${description}'''
 
+
+[[dependencies."${id}"]]
+type="discouraged"
+modId="extura"
+reason="Exturaddon REPLACES Extura"
+
+[[dependencies."${id}"]]
+modId="figura"
+type="optional"
+reason="Exturaddon is FOR Figura"
+ordering="AFTER"
+side="CLIENT"
+
 [[mixins]]
 config = "${id}.mixins.json"
 side="CLIENT"
