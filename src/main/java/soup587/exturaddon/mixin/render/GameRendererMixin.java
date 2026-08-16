@@ -14,6 +14,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import soup587.exturaddon.ducks.AvatarAccessor;
+import com.moulberry.mixinconstraints.annotations.IfModAbsent;
 
 @Mixin(GameRenderer.class)
 public class GameRendererMixin {
@@ -21,20 +22,24 @@ public class GameRendererMixin {
 	@Shadow @Final private Minecraft minecraft;
 
 	@Inject(method = "render", at = @At("HEAD"))
+	//? if =1.20.1 {
+		@IfModAbsent(value = "extura")
+		@IfModAbsent(value= "figura", minVersion = "0.1.5")
+	//?}
 	//? if < 1.20.2 {
-	/*private void preRender(float tickDelta, long startTime, boolean tick, CallbackInfo ci) {
-	*///?} else
-	private void preRender(DeltaTracker tickDelta, boolean p_109096_, CallbackInfo ci) {
+	/*private void exturaPreRender(float tickDelta, long startTime, boolean tick, CallbackInfo ci) {
+	*///?} else	
+	private void exturaPreRender(DeltaTracker tickDelta, boolean p_109096_, CallbackInfo ci) {
 		Avatar avatar = AvatarManager.getAvatar(this.minecraft.getCameraEntity());
 		if (avatar == null)
 			return;
-		avatar.customInstructions.get("preRender").reset(avatar.permissions.get(Permissions.RENDER_INST));
+		avatar.customInstructions.get("exturaPreRender").reset(avatar.permissions.get(Permissions.RENDER_INST));
 
-		AvatarManager.executeAll("preRender", renderedAvatar -> ((AvatarAccessor)renderedAvatar).extura$preRenderEvent(
-			//? if < 1.20.2 {
-				/*tickDelta
-			*///?} else
-				tickDelta.getGameTimeDeltaPartialTick(true)
+		AvatarManager.executeAll("exturaPreRender", renderedAvatar -> ((AvatarAccessor)renderedAvatar).extura$preRenderEvent(
+			tickDelta
+			//? if > 1.20.2 {
+				.getGameTimeDeltaPartialTick(true)
+			//?}
 		));
 	}
 
