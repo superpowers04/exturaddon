@@ -42,13 +42,25 @@ public abstract class AvatarMixin implements AvatarAccessor {
 	@Invoker("run")
 	abstract Varargs exturaddon$invokeRun(Object toRun, Avatar.Instructions limit, Object... args);
 
-	public Avatar.Instructions preRender, init, tick;
+	public Avatar.Instructions extura_prerender, init, tick;
+
+	private boolean extura_allow_preRender = false;
 
 	@Inject(method = "<init>(Ljava/util/UUID;)V", at = @At("TAIL"))
-	@IfModAbsent(value = "extura")
+	//? if =1.20.1 {
+		@IfModAbsent(value = "extura")
+		@IfModAbsent(value= "figura", minVersion = "0.1.5")
+	//?}
 	private void constructor(UUID owner, CallbackInfo ci) {
-		this.preRender = new Avatar.Instructions(permissions.get(Permissions.RENDER_INST));
-		customInstructions.putIfAbsent("preRender", this.preRender);
+		try{
+
+			this.extura_prerender = new Avatar.Instructions(permissions.get(Permissions.RENDER_INST));
+			customInstructions.putIfAbsent("exturaPreRender", this.extura_prerender);
+			extura_allow_preRender = true;
+		}catch(Exception ignored){
+			extura_allow_preRender = false;
+
+		}
 	}
 
 
@@ -67,10 +79,13 @@ public abstract class AvatarMixin implements AvatarAccessor {
 
 
 	@Unique
-	@IfModAbsent(value = "extura")
+	//? if =1.20.1 {
+		@IfModAbsent(value = "extura")
+		@IfModAbsent(value= "figura", minVersion = "0.1.5")
+	//?}
 	public void extura$preRenderEvent(float delta) {
-		if (loaded && luaRuntime != null && luaRuntime.getUser() != null)
-			exturaddon$invokeRun("PRE_RENDER", preRender, delta, renderMode.name());
+		if (extura_allow_preRender && loaded && luaRuntime != null && luaRuntime.getUser() != null)
+			exturaddon$invokeRun("PRE_RENDER", extura_prerender, delta, renderMode.name());
 	}
 	@Unique
 	@IfModAbsent(value = "extura")

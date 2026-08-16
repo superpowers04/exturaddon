@@ -9,10 +9,11 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import soup587.exturaddon.ducks.AvatarAccessor;
 
+
 @Mixin(NetworkStuff.class)
 public class NetworkStuffMixin {
 
-	@Inject(at = @At("HEAD"), method="uploadAvatar", cancellable = true)
+	@Inject(at = @At("HEAD"), method="uploadAvatar*", cancellable = true)
 	private static void uploadAvatar(Avatar avatar, CallbackInfo ci){
 		if(((AvatarAccessor)avatar).extura$uploadEvent()){
 			ci.cancel();

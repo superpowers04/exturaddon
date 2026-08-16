@@ -9,12 +9,14 @@ import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
+import com.moulberry.mixinconstraints.annotations.IfModAbsent;
 import soup587.exturaddon.ducks.RendererAPIAccessor;
 
 @Mixin(LevelRenderer.class)
 public class LevelRendererMixin {
 
 	@Shadow @Final private Minecraft minecraft;
+
 //? if > 1.21.9{
  	/*@ModifyExpressionValue(method = "extractVisibleEntities", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;isSleeping()Z"))
 *///? } else if > 1.21.1{
