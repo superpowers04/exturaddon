@@ -162,4 +162,7 @@
 	"figura.docs.events.upload": "(Exturaddon) Runs before your avatar is uploaded(Note it's run 3 times).\nArgument 1 is where it's currently uploading to as a string. \"BOTH\", \"FSB\" second then \"BACKEND\"\nArgument 2 is true if uploading to backend\nArgument 2 is true if uploading to fsb\nReturn true to cancel uploading to whatever is currently being uploaded to.\nNo NBT edits after the 'BOTH' event call will be uploaded\nReturn true to cancel upload",
 	"figura.docs.events.pre_render": "Runs at the HEAD of Minecraft's render function.\nArgument 1 is a number between 0 to 1 for the delta between last tick and the next tick\nArgument 2 is a string with the name of the source of this render event (See /figura docs enums render_modes)",
 	"figura.docs.events.file_drop": "(Exturaddon) Runs whenever a file is dropped into the game window.\nArgument 1 is a table of all dropped in files as input streams. These streams are closed after the event is finished.\nReturn true to prevent the game from attempting to do anything with the dropped files"
+  "figura.docs.extura.renderer.do_viewbobbing": "(Exturaddon) When false, forcibly disables viewbobbing",
+  "figura.docs.extura.renderer.do_camera_viewbobbing": "(Exturaddon) (Unimplemented) When false, forcibly disables camera viewbobbing specifically\nIs superseded by doViewbobbing, if disabled",
+  "figura.docs.extura.renderer.do_item_viewbobbing": "(Exturaddon) When false, forcibly disables item viewbobbing specifically\nIs superseded by doViewbobbing, if disabled"
 }

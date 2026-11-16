@@ -16,5 +16,6 @@
     "lua.RendererAPIMixin",
     "render.LevelRendererMixin",
     "render.GuiMixin"
-  ]
+  ],
+  "mixinextras": {"minVersion": "0.5.0"}
 }

@@ -48,6 +48,16 @@ public class RendererAPIMixin implements RendererAPIAccessor {
 	@LuaFieldDoc("renderer.render_right_item")
 	public boolean renderRightItem;
 
+	@LuaWhitelist
+	@LuaFieldDoc("extura.renderer.do_viewbobbing")
+	public boolean doViewbobbing = true;
+	@LuaWhitelist
+	@LuaFieldDoc("extura.renderer.do_item_viewbobbing")
+	public boolean doItemViewbobbing = true;
+	@LuaWhitelist
+	@LuaFieldDoc("extura.renderer.do_camera_viewbobbing")
+	public boolean doCameraViewbobbing = true;
+
 
 	@LuaWhitelist
 	@LuaMethodDoc("renderer.should_render_player_health")
@@ -115,6 +125,22 @@ public class RendererAPIMixin implements RendererAPIAccessor {
 	@LuaMethodDoc("renderer.should_render_first_person")
 	public boolean shouldRenderFirstPerson() {
 		return renderFirstPerson;
+	}
+
+	@LuaWhitelist
+	@LuaMethodDoc("extura.renderer.should_do_viewbobbing")
+	public boolean shouldDoViewbobbing() {
+		return doViewbobbing;
+	}
+	@LuaWhitelist
+	@LuaMethodDoc("extura.renderer.should_do_item_viewbobbing")
+	public boolean shouldDoItemViewbobbing() {
+		return doItemViewbobbing;
+	}
+	@LuaWhitelist
+	@LuaMethodDoc("extura.renderer.should_do_camera_viewbobbing")
+	public boolean shouldDoCameraViewbobbing() {
+		return doCameraViewbobbing;
 	}
 
 	@LuaWhitelist
@@ -230,6 +256,42 @@ public class RendererAPIMixin implements RendererAPIAccessor {
 		return renderRightArm;
 	}
 
+	@LuaWhitelist
+	@LuaMethodDoc(
+			overloads = @LuaMethodOverload(
+					argumentTypes = Boolean.class,
+					argumentNames = "bool"
+			),
+			value = "renderer.set_do_viewbobbing"
+	)
+	public RendererAPI setDoViewbobbing(boolean bool) {
+		this.doViewbobbing = bool;
+		return (RendererAPI)(Object)this;
+	}
+	@LuaWhitelist
+	@LuaMethodDoc(
+			overloads = @LuaMethodOverload(
+					argumentTypes = Boolean.class,
+					argumentNames = "bool"
+			),
+			value = "extura.renderer.set_do_item_viewbobbing"
+	)
+	public RendererAPI setDoItemViewbobbing(boolean bool) {
+		this.doItemViewbobbing = bool;
+		return (RendererAPI)(Object)this;
+	}
+	@LuaWhitelist
+	@LuaMethodDoc(
+			overloads = @LuaMethodOverload(
+					argumentTypes = Boolean.class,
+					argumentNames = "bool"
+			),
+			value = "extura.renderer.set_do_camera_viewbobbing"
+	)
+	public RendererAPI setDoCameraViewbobbing(boolean bool) {
+		this.doCameraViewbobbing = bool;
+		return (RendererAPI)(Object)this;
+	}
 
 
 	@Inject(method="__index", at = @At("HEAD"), cancellable = true)
@@ -247,6 +309,9 @@ public class RendererAPIMixin implements RendererAPIAccessor {
 			case "renderRightItem" -> renderRightItem;
 			case "renderLeftArm" -> renderLeftArm;
 			case "renderRightArm" -> renderRightArm;
+			case "doViewbobbing" -> doViewbobbing;
+			case "doItemViewbobbing" -> doItemViewbobbing;
+			case "doCameraViewbobbing" -> doCameraViewbobbing;
 			default -> null;
 		});
 		if (returnr != null) cir.setReturnValue(returnr);
@@ -263,6 +328,9 @@ public class RendererAPIMixin implements RendererAPIAccessor {
 			case "renderEffects" -> renderEffects = value;
 			case "renderGUI" -> renderGUI = value;
 			case "renderFirstPerson" -> renderFirstPerson = value;
+			case "doViewbobbing" -> doViewbobbing = value;
+			case "doItemViewbobbing" -> doItemViewbobbing = value;
+			case "doCameraViewbobbing" -> doCameraViewbobbing = value;
 			default -> {return;}
 		}
 		ci.cancel();

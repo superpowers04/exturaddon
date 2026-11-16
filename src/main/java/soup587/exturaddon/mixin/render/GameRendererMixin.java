@@ -1,8 +1,15 @@
 package soup587.exturaddon.mixin.render;
 
 //? if > 1.20.1
+import com.llamalad7.mixinextras.expression.Definition;
+import com.llamalad7.mixinextras.expression.Expression;
+import com.llamalad7.mixinextras.injector.v2.WrapWithCondition;
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.OptionInstance;
 import net.minecraft.client.renderer.GameRenderer;
 import org.figuramc.figura.avatar.Avatar;
 import org.figuramc.figura.avatar.AvatarManager;
@@ -14,6 +21,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import soup587.exturaddon.ducks.AvatarAccessor;
+import soup587.exturaddon.ducks.RendererAPIAccessor;
 
 @Mixin(GameRenderer.class)
 public class GameRendererMixin {
@@ -37,5 +45,21 @@ public class GameRendererMixin {
 				tickDelta.getGameTimeDeltaPartialTick(true)
 		));
 	}
+
+	// mixinextras my bloved - jess
+
+	@Definition(id = "bobView", method = "Lnet/minecraft/client/Options;bobView()Lnet/minecraft/client/OptionInstance;")
+	@Definition(id = "get", method = "Lnet/minecraft/client/OptionInstance;get()Ljava/lang/Object;")
+	@Expression("?.bobView().get()")
+	@WrapOperation(method = "renderItemInHand", at = @At("MIXINEXTRAS:EXPRESSION"))
+	private Object nopBobItem(OptionInstance instance, Operation<Object> original) {
+		Avatar avatar = AvatarManager.getAvatar(this.minecraft.getCameraEntity());
+		if (avatar != null && avatar.luaRuntime != null && !((RendererAPIAccessor) avatar.luaRuntime.renderer).shouldDoItemViewbobbing()) {
+			return false;
+		}
+		return original.call(instance);
+	}
+
+	// i have tried multiple methods to cancel the camera bobbing separately, but it's exceedingly resilient for some reason
 
 }

@@ -13,4 +13,7 @@ public interface RendererAPIAccessor {
 	boolean shouldRenderRightItem();
 	boolean shouldRenderLeftArm();
 	boolean shouldRenderRightArm();
+	boolean shouldDoViewbobbing();
+	boolean shouldDoItemViewbobbing();
+	boolean shouldDoCameraViewbobbing();
 }
