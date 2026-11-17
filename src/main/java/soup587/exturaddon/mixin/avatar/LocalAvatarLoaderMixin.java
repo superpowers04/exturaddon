@@ -2,6 +2,8 @@ package soup587.exturaddon.mixin.avatar;
 
 import com.moulberry.mixinconstraints.annotations.IfModAbsent;
 
+import soup587.exturaddon.utils.ExtIOUtils;
+
 import org.figuramc.figura.FiguraMod;
 import org.figuramc.figura.avatar.AvatarManager;
 import org.figuramc.figura.avatar.UserData;
@@ -38,8 +40,6 @@ import org.figuramc.figura.avatar.local.LocalAvatarLoader;
 
 @Mixin(LocalAvatarLoader.class)
 public class LocalAvatarLoaderMixin {
-	@Unique
-	private static Matcher ValidFileMatcher = Pattern.compile(".*(avatar\\.json|avatar\\.jsonc|avatar\\.extura\\.json|(\\.lua|\\.bbmodel|\\.ogg|\\.png))$").matcher("");
 	@Shadow 
 	private static final HashMap<Path, WatchKey> KEYS = new HashMap<>();
 	@Shadow
@@ -53,7 +53,6 @@ public class LocalAvatarLoaderMixin {
 	/* I know overwrite isn't recommended but I'm literally replacing the entire function to make it- idk WORK*/
 	@Overwrite
 	public static void tick() {
-		WatchEvent<?> event = null;
 		if(queuedReload){
 			queuedReload = false;
 			AvatarManager.loadLocalAvatar(LocalAvatarLoader.getLastLoadedPath());
@@ -73,20 +72,20 @@ public class LocalAvatarLoaderMixin {
 						if (watchEvent.kind() == StandardWatchEventKinds.OVERFLOW)
 							continue;
 
-						event = watchEvent;
-						Path path = entry.getKey().resolve((Path) event.context());
-						String name = IOUtils.getFileNameOrEmpty(path);
+						Path path = entry.getKey().resolve((Path) watchEvent.context());
 
-						if (IOUtils.isHidden(path) || !(Files.isDirectory(path) || ValidFileMatcher.reset(name).matches()))
+						if (ExtIOUtils.isInvalid(path))
 							continue;
 						queuedReload = true;
-						FiguraMod.debug("Detected file changes in the Avatar directory (" + event.context().toString() + "), reloading!");
+						FiguraMod.debug("Detected file changes in the Avatar directory (" + watchEvent.context().toString() + "), reloading!");
 						return;
 					}
 				}
 				return;
 			}
 			boolean reload = false;
+
+			WatchEvent<?> event = null;
 			for (Map.Entry<Path, WatchKey> entry : entries) {
 				if(entry == null) continue;
 				WatchKey key = entry.getValue();
@@ -97,12 +96,9 @@ public class LocalAvatarLoaderMixin {
 					WatchEvent.Kind<?> kind = watchEvent.kind();
 					if (kind == StandardWatchEventKinds.OVERFLOW)
 						continue;
+					Path path = entry.getKey().resolve((Path) watchEvent.context());
 
-					event = watchEvent;
-					Path path = entry.getKey().resolve((Path) event.context());
-					String name = IOUtils.getFileNameOrEmpty(path);
-
-					if (IOUtils.isHidden(path) || !(Files.isDirectory(path) || ValidFileMatcher.reset(name).matches()))
+					if (ExtIOUtils.isInvalid(path))
 						continue;
 
 					// This is it, this is the Unix-only check. I(superpowers04) dunno why only Unix needs to add paths like this
@@ -110,13 +106,13 @@ public class LocalAvatarLoaderMixin {
 					if (kind == StandardWatchEventKinds.ENTRY_CREATE) 
 						addWatchKey(path, KEYS::put);
 
-					reload = true;
+					event = watchEvent;
 
 				}
 			}
 
 			// reload avatar
-			if (reload) {
+			if (event != null) {
 				queuedReload = true;
 				FiguraMod.debug("Detected file changes in the Avatar directory (" + event.context().toString() + "), Reloading on next tick!");
 			}
