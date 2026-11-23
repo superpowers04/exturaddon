@@ -17,7 +17,7 @@ public class ConfigExtensions {
 				NetworkStuff.reAuth();
 			}
 			{
-				this.name = this.name.copy().withStyle(ChatFormatting.RED);
+				this.name = Exturlatable.of("config.use_secure_cloud").withStyle(ChatFormatting.RED);
 				this.tooltip = Exturlatable.of("config.use_secure_cloud.tooltip");
 			}
 		};
@@ -28,7 +28,7 @@ public class ConfigExtensions {
 			NetworkStuff.reAuth();
 		}
 		{
-			this.name = this.name.copy().withStyle(ChatFormatting.RED);
+			this.name = Exturlatable.of("config.block_cloud").withStyle(ChatFormatting.RED);
 			this.tooltip = Exturlatable.of("config.block_cloud.tooltip",SERVER_IP.defaultValue);
 		}
 	};
@@ -39,7 +39,7 @@ public class ConfigExtensions {
 			NetworkStuff.reAuth();
 		}
 		{
-			this.name = this.name.copy().withStyle(ChatFormatting.RED);
+			this.name = Exturlatable.of("config.vanilla_cloud").withStyle(ChatFormatting.RED);
 			this.tooltip = Exturlatable.of("config.vanilla_cloud.tooltip");
 		}
 	};
@@ -50,7 +50,7 @@ public class ConfigExtensions {
 			NetworkStuff.reAuth();
 		}
 		{
-			this.name = this.name.copy();
+			this.name = Exturlatable.of("config.use_mc_host_resolver");
 			this.tooltip = Exturlatable.of("config.use_mc_host_resolver.tooltip");
 		}
 	};

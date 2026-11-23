@@ -50,6 +50,7 @@ dependencies {
 			officialMojangMappings()
 			if (hasProperty("deps.parchment")) parchment("org.parchmentmc.data:parchment-${prop("deps.parchment")}@zip")
 		})
+
 	modImplementation(libs.fabric.loader)
 	implementation(libs.moulberry.mixinconstraints)
 	include(libs.moulberry.mixinconstraints)

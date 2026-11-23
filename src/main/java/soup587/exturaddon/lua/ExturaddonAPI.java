@@ -3,6 +3,7 @@ package soup587.exturaddon.lua;
 import com.mojang.brigadier.StringReader;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.resolver.ServerAddress;
 //? if > 1.20.2 {
 import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.client.multiplayer.ServerData;
@@ -27,6 +28,7 @@ import org.figuramc.figura.avatar.Avatar;
 import org.figuramc.figura.avatar.AvatarManager;
 import org.figuramc.figura.avatar.local.LocalAvatarFetcher;
 import org.figuramc.figura.avatar.local.LocalAvatarLoader;
+import org.figuramc.figura.config.*;
 import org.figuramc.figura.backend2.NetworkStuff;
 import org.figuramc.figura.gui.widgets.lists.AvatarList;
 import org.figuramc.figura.lua.LuaNotNil;
@@ -46,6 +48,7 @@ import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import soup587.exturaddon.ExturaPermissions;
+import soup587.exturaddon.config.ConfigExtensions;
 import soup587.exturaddon.lua.KeyMappingAPI;
 import soup587.exturaddon.lua.NotImplementedLuaError;
 import soup587.exturaddon.overrides.ExturaInput;
@@ -60,6 +63,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
+
+import java.io.*;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 import static org.figuramc.figura.lua.api.world.WorldAPI.getCurrentWorld;
 
@@ -134,6 +141,16 @@ public class ExturaddonAPI {
 	}
 
 	@LuaWhitelist
+	@LuaMethodDoc("extura.is_backend_connected")
+	public static boolean isBackendConnected() {
+		return NetworkStuff.isConnected();
+	}
+	@LuaWhitelist
+	@LuaMethodDoc("extura.get_current_backend")
+	public static String getCurrentBackend(boolean skipFSB) {
+		return NetworkStuff.isConnected() ? actuallyGetBackendAddress() : "" ;
+	}
+	@LuaWhitelist
 	@LuaMethodDoc("extura.upload_avatar")
 	public boolean uploadAvatar() {
 		if(!this.isHost) return false;
@@ -159,7 +176,19 @@ public class ExturaddonAPI {
 		AvatarList.selectedEntry = null;
 		return true;
 	}
+
 	 */
+
+
+	public static String actuallyGetBackendAddress(){
+		if(ConfigExtensions.BLOCK_CLOUD.value) return "http://127.0.0.1:9/api";
+		if(ConfigExtensions.VANILLA_CLOUD.value){
+			return "https://" + ServerAddress.parseString(Configs.SERVER_IP.defaultValue).getHost() + "/api";
+		}
+		String backendIP = ConfigExtensions.USE_MC_HOST_RESOLVER.value ? ServerAddress.parseString(Configs.SERVER_IP.value).getHost() : Configs.SERVER_IP.value;
+		if(ConfigExtensions.USE_SECURE_CLOUD.value) return "https://" + backendIP + "/api";
+		return "http://" + backendIP + "/api";
+	}
 	@LuaWhitelist
 	@LuaMethodDoc(
 			overloads = {

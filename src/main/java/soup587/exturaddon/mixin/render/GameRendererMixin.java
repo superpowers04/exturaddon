@@ -1,12 +1,13 @@
 package soup587.exturaddon.mixin.render;
 
-//? if > 1.20.1
 import com.llamalad7.mixinextras.expression.Definition;
 import com.llamalad7.mixinextras.expression.Expression;
 import com.llamalad7.mixinextras.injector.v2.WrapWithCondition;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.moulberry.mixinconstraints.annotations.IfModAbsent;
+//? if > 1.20.2
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.OptionInstance;
@@ -28,21 +29,22 @@ public class GameRendererMixin {
 
 	@Shadow @Final private Minecraft minecraft;
 
+	@IfModAbsent(value = "Figura",minVersion = "0.1.5")
 	@Inject(method = "render", at = @At("HEAD"))
 	//? if < 1.20.2 {
 	/*private void preRender(float tickDelta, long startTime, boolean tick, CallbackInfo ci) {
 	*///?} else
-	private void preRender(DeltaTracker tickDelta, boolean p_109096_, CallbackInfo ci) {
+	private void preRender(DeltaTracker tickDelta, boolean tick, CallbackInfo ci) {
 		Avatar avatar = AvatarManager.getAvatar(this.minecraft.getCameraEntity());
 		if (avatar == null)
 			return;
-		avatar.customInstructions.get("preRender").reset(avatar.permissions.get(Permissions.RENDER_INST));
+		avatar.customInstructions.get("exturaPreRender").reset(avatar.permissions.get(Permissions.RENDER_INST));
 
-		AvatarManager.executeAll("preRender", renderedAvatar -> ((AvatarAccessor)renderedAvatar).extura$preRenderEvent(
-			//? if < 1.20.2 {
-				/*tickDelta
-			*///?} else
-				tickDelta.getGameTimeDeltaPartialTick(true)
+		AvatarManager.executeAll("exturaPreRender", renderedAvatar -> ((AvatarAccessor)renderedAvatar).extura$preRenderEvent(
+				tickDelta
+			//? if > 1.20.2 {
+						.getGameTimeDeltaPartialTick(true)
+			//? }
 		));
 	}
 

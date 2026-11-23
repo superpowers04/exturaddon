@@ -18,12 +18,11 @@ public class OptionInstanceMixin {
 	@Inject(at = @At("HEAD"), method = "get", cancellable = true)
 	private void nopBob(CallbackInfoReturnable<Object> cir) {
 		Minecraft instance = Minecraft.getInstance();
-		if (instance.options == null) return;
-		if ((Object) this == instance.options.bobView()) {
-			Avatar avatar = AvatarManager.getAvatar(instance.getCameraEntity());
-			if (avatar != null && avatar.luaRuntime != null && !((RendererAPIAccessor) avatar.luaRuntime.renderer).shouldDoViewbobbing()) {
-				cir.setReturnValue(false);
-			}
+		if (instance.options == null || (Object) this != instance.options.bobView()) return;
+		Avatar avatar = AvatarManager.getAvatar(instance.getCameraEntity());
+		if (avatar != null && avatar.luaRuntime != null && !((RendererAPIAccessor) avatar.luaRuntime.renderer).shouldDoViewbobbing()) {
+			cir.setReturnValue(false);
 		}
+
 	}
 }

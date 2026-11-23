@@ -1,7 +1,5 @@
 package soup587.exturaddon.mixin.render;
 
-//? if > 1.20.1
-import net.minecraft.client.DeltaTracker;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
@@ -18,6 +16,8 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import soup587.exturaddon.ducks.RendererAPIAccessor;
+//? if > 1.20.2
+import net.minecraft.client.DeltaTracker;
 
 @Mixin(Gui.class)
 public class GuiMixin {
