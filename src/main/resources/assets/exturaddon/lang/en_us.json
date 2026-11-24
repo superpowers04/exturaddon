@@ -86,6 +86,7 @@
 	"figura.docs.extura.get_sensitivity": "(Exturaddon) Returns your sensitivity",
 	"figura.docs.extura.set_smooth_camera": "(Exturaddon) Sets the 'Smooth Camera' option",
 	"figura.docs.extura.get_smooth_camera": "(Exturaddon) Returns the 'Smooth Camera' option",
+	"figura.docs.extura.setCameraType": "(Exturaddon) Changes the host's camera type\n* First argument is either a bool for if in First Person or a string('THIRD_PERSON_BACK', 'THIRD_PERSON_FRONT', or 'FIRST_PERSON')\n* If First argument is a bool, second argument is if backwards when not first person",
 
 	"figura.docs.extura.get_mod_version": "(Exturaddon) Get the Version of a mod as a string. Returns an null if mod isn't loaded",
 	"figura.docs.extura.get_mod_name": "(Exturaddon) Gets the name of a mod as a string. Returns an empty string if the mod isn't loaded",

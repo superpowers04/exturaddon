@@ -8,6 +8,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.PlayerRideableJumping;
 import org.figuramc.figura.avatar.Avatar;
 import org.figuramc.figura.avatar.AvatarManager;
+import org.figuramc.figura.lua.FiguraLuaRuntime;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -18,6 +19,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import soup587.exturaddon.ducks.RendererAPIAccessor;
 //? if > 1.20.2
 import net.minecraft.client.DeltaTracker;
+import soup587.exturaddon.utils.ExturaUtils;
 
 @Mixin(Gui.class)
 public class GuiMixin {
@@ -31,33 +33,33 @@ public class GuiMixin {
 	@Inject(at = @At("HEAD"), method = "renderItemHotbar", cancellable = true)
 	private void renderHotbar(GuiGraphics guiGraphics, DeltaTracker deltaTracker, CallbackInfo ci) {
 	//?}
-		Entity entity = this.minecraft.getCameraEntity(); Avatar avatar;
-		if (entity == null || (avatar = AvatarManager.getAvatar(entity)) == null || avatar.luaRuntime == null || ((RendererAPIAccessor) avatar.luaRuntime.renderer).shouldRenderHotbar())
+		FiguraLuaRuntime lua = ExturaUtils.GetLuaRuntime(this.minecraft.getCameraEntity());
+		if (lua == null || ((RendererAPIAccessor) lua.renderer).shouldRenderHotbar())
 			return;
 		ci.cancel();
 	}
 	@Inject(at = @At("HEAD"), method = "renderEffects", cancellable = true)
-	//? if < 1.20.2 {
-	/*private void setRenderEffects(GuiGraphics graphics, CallbackInfo ci) {
-	*///?} else
-	private void setRenderEffects(GuiGraphics guiGraphics, DeltaTracker deltaTracker, CallbackInfo ci) {
-		Entity entity = this.minecraft.getCameraEntity(); Avatar avatar;
-		if (entity == null || (avatar = AvatarManager.getAvatar(entity)) == null || avatar.luaRuntime == null || ((RendererAPIAccessor) avatar.luaRuntime.renderer).shouldRenderEffects())
+	private void setRenderEffects(GuiGraphics guiGraphics,
+		//? if (> 1.20.2)
+			DeltaTracker deltaTracker,
+		CallbackInfo ci) {
+		FiguraLuaRuntime lua = ExturaUtils.GetLuaRuntime(this.minecraft.getCameraEntity());
+		if (lua == null || ((RendererAPIAccessor) lua.renderer).shouldRenderEffects())
 			return;
 		ci.cancel();
 	}
 	//? if < 1.21.2 {
 	@Inject(at = @At("HEAD"), method = "renderJumpMeter", cancellable = true)
 	private void setRenderJumpMeter(PlayerRideableJumping mount, GuiGraphics graphics, int x, CallbackInfo ci) {
-		Entity entity = this.minecraft.getCameraEntity(); Avatar avatar;
-		if (entity == null || (avatar = AvatarManager.getAvatar(entity)) == null || avatar.luaRuntime == null || ((RendererAPIAccessor) avatar.luaRuntime.renderer).shouldRenderJumpMeter())
+		FiguraLuaRuntime lua = ExturaUtils.GetLuaRuntime(this.minecraft.getCameraEntity());
+		if (lua == null || ((RendererAPIAccessor) lua.renderer).shouldRenderJumpMeter())
 			return;
 		ci.cancel();
 	}
 	@Inject(at = @At("HEAD"), method = "renderExperienceBar", cancellable = true)
 	private void setRenderExperienceBar(GuiGraphics graphics, int x, CallbackInfo ci) {
-		Entity entity = this.minecraft.getCameraEntity(); Avatar avatar;
-		if (entity == null || (avatar = AvatarManager.getAvatar(entity)) == null || avatar.luaRuntime == null || ((RendererAPIAccessor) avatar.luaRuntime.renderer).shouldRenderExperienceBar())
+		FiguraLuaRuntime lua = ExturaUtils.GetLuaRuntime(this.minecraft.getCameraEntity());
+		if (lua == null || ((RendererAPIAccessor) lua.renderer).shouldRenderExperienceBar())
 			return;
 		ci.cancel();
 	}
@@ -74,17 +76,15 @@ public class GuiMixin {
 
 	@Inject(at = @At("HEAD"), method = "renderSelectedItemName", cancellable = true)
 	private void setRenderSelectedItemName(GuiGraphics graphics, CallbackInfo ci) {
-		Entity entity = this.minecraft.getCameraEntity(); Avatar avatar;
-		if (entity == null || (avatar = AvatarManager.getAvatar(entity)) == null || avatar.luaRuntime == null ||
-				((RendererAPIAccessor) avatar.luaRuntime.renderer).shouldRenderSelectedItemName())
+		FiguraLuaRuntime lua = ExturaUtils.GetLuaRuntime(this.minecraft.getCameraEntity());
+		if (lua == null || ((RendererAPIAccessor) lua.renderer).shouldRenderSelectedItemName())
 			return;
 		ci.cancel();
 	}
 	@Inject(at = @At("HEAD"), method = "renderPlayerHealth", cancellable = true)
 	private void setRenderPlayerHealth(GuiGraphics graphics, CallbackInfo ci) {
-		Entity entity = this.minecraft.getCameraEntity(); Avatar avatar;
-		if (entity == null || (avatar = AvatarManager.getAvatar(entity)) == null || avatar.luaRuntime == null ||
-				((RendererAPIAccessor) avatar.luaRuntime.renderer).shouldRenderPlayerHealth())
+		FiguraLuaRuntime lua = ExturaUtils.GetLuaRuntime(this.minecraft.getCameraEntity());
+		if (lua == null || ((RendererAPIAccessor) lua.renderer).shouldRenderPlayerHealth())
 			return;
 		ci.cancel();
 	}

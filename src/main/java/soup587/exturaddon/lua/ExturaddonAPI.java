@@ -1,6 +1,7 @@
 package soup587.exturaddon.lua;
 
 import com.mojang.brigadier.StringReader;
+import net.minecraft.client.CameraType;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.resolver.ServerAddress;
@@ -43,7 +44,10 @@ import org.figuramc.figura.math.vector.FiguraVec3;
 import org.figuramc.figura.mixin.ClientLevelInvoker;
 import org.figuramc.figura.mixin.input.KeyMappingAccessor;
 import org.figuramc.figura.utils.LuaUtils;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.luaj.vm2.LuaError;
+import org.luaj.vm2.LuaValue;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -239,7 +243,6 @@ public class ExturaddonAPI {
 	public void setVelocity(Object x, Double y, Double z) {
 		if(!canExturaCheat()) return;
 		this.minecraft.player.setDeltaMovement(LuaUtils.parseVec3("player_setVelocity", x, y, z).asVec3());
-
 	}
 	@LuaWhitelist
 	@LuaMethodDoc(
@@ -512,6 +515,48 @@ public class ExturaddonAPI {
 		if (player == null) return;
 		player.setDiscardFriction(hasForce != true);
 	}
+
+
+	@LuaWhitelist
+	@LuaMethodDoc(value = "extura.getCameraType")
+	public String getCameraType() {
+		if (!this.isHost){ return "THIRD_PERSON_FRONT";}
+		CameraType camera = Minecraft.getInstance().options.getCameraType();
+		return camera.toString();
+	}
+
+	@LuaWhitelist
+	@LuaMethodDoc(
+			overloads = {
+					@LuaMethodOverload(
+							argumentTypes = {Boolean.class,Boolean.class},
+							argumentNames = {"isFirstPerson", "isBackwards"}
+					),
+					@LuaMethodOverload(
+							argumentTypes = {String.class},
+							argumentNames = {"CameraType"}
+					)
+			},
+			value = "extura.setCameraType"
+	)
+	public void setCameraType(LuaValue isFirstPerson, @Nullable Boolean isBackwards) {
+		if (!this.isHost){ return;}
+		if(isFirstPerson.isboolean()){
+			Minecraft.getInstance().options.setCameraType(isFirstPerson.checkboolean() ? CameraType.FIRST_PERSON : Boolean.TRUE.equals(isBackwards) ? CameraType.THIRD_PERSON_FRONT : CameraType.THIRD_PERSON_BACK);
+			return;
+		}
+		if(isFirstPerson.isstring()){
+			String camera = isFirstPerson.tojstring();
+			Minecraft.getInstance().options.setCameraType(
+				camera == "THIRD_PERSON_FRONT" ? CameraType.THIRD_PERSON_FRONT :
+				camera == "FIRST_PERSON" ? CameraType.FIRST_PERSON :
+				CameraType.THIRD_PERSON_BACK
+			);
+			return;
+		}
+		Minecraft.getInstance().options.setCameraType(CameraType.THIRD_PERSON_BACK);
+	}
+
 
 	@LuaWhitelist
 	@LuaMethodDoc("extura.get_key_mappings")
