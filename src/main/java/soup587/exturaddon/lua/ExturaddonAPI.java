@@ -93,7 +93,7 @@ public class ExturaddonAPI {
 		this.isHost = (this.owner = owner).isHost;
 	}
 	@LuaWhitelist
-	@LuaMethodDoc("extura.allow_extura_cheats")
+	@LuaMethodDoc("exturaddon.allow_extura_cheats")
 
 
 	public Boolean allowExturaCheats() {
@@ -145,17 +145,17 @@ public class ExturaddonAPI {
 	}
 
 	@LuaWhitelist
-	@LuaMethodDoc("extura.is_backend_connected")
+	@LuaMethodDoc("exturaddon.is_backend_connected")
 	public static boolean isBackendConnected() {
 		return NetworkStuff.isConnected();
 	}
 	@LuaWhitelist
-	@LuaMethodDoc("extura.get_current_backend")
+	@LuaMethodDoc("exturaddon.get_current_backend")
 	public static String getCurrentBackend(boolean skipFSB) {
 		return NetworkStuff.isConnected() ? actuallyGetBackendAddress() : "" ;
 	}
 	@LuaWhitelist
-	@LuaMethodDoc("extura.upload_avatar")
+	@LuaMethodDoc("exturaddon.upload_avatar")
 	public boolean uploadAvatar() {
 		if(!this.isHost) return false;
 		Avatar avatar = AvatarManager.getAvatarForPlayer(FiguraMod.getLocalPlayerUUID());
@@ -168,7 +168,7 @@ public class ExturaddonAPI {
 		return true;
 	}
 	/*@LuaWhitelist
-	@LuaMethodDoc("extura.upload_avatar_to")
+	@LuaMethodDoc("exturaddon.upload_avatar_to")
 	public boolean uploadAvatarTo(boolean backend,boolean fsb) {
 		if(!this.isHost) return false;
 		Avatar avatar = AvatarManager.getAvatarForPlayer(FiguraMod.getLocalPlayerUUID());
@@ -199,7 +199,7 @@ public class ExturaddonAPI {
 					@LuaMethodOverload(argumentTypes = String.class, argumentNames = "Avatar Owner"),
 					@LuaMethodOverload(argumentTypes = EntityAPI.class, argumentNames = "Avatar Owner")
 			},
-			value = "extura.reload_avatar")
+			value = "exturaddon.reload_avatar")
 	public void reloadAvatar(Object playerUUID) {
 		if(!this.isHost) return;
 		final UUID uuid;
@@ -217,7 +217,7 @@ public class ExturaddonAPI {
 	}
 
 	@LuaWhitelist
-	@LuaMethodDoc("extura.load_local_avatar") // Did not steal this from GoofyPlugin, no proof
+	@LuaMethodDoc("exturaddon.load_local_avatar") // Did not steal this from GoofyPlugin, no proof
 	public void loadLocalAvatar(String path) {
 		if(!this.isHost) return;
 		if(path == null || path.isEmpty()){
@@ -238,7 +238,7 @@ public class ExturaddonAPI {
 							argumentNames = "vec"
 					),
 			},
-			value = "extura.set_velocity"
+			value = "exturaddon.set_velocity"
 	)
 	public void setVelocity(Object x, Double y, Double z) {
 		if(!canExturaCheat()) return;
@@ -252,7 +252,7 @@ public class ExturaddonAPI {
 							argumentNames = "vec"
 					),
 			},
-			value = "extura.travel"
+			value = "exturaddon.travel"
 	)
 	public void travel(Object x, Double y, Double z) {
 		if(!canExturaCheat()) return;
@@ -260,7 +260,7 @@ public class ExturaddonAPI {
 
 	}
 	@LuaWhitelist
-	@LuaMethodDoc("extura.set_pose")
+	@LuaMethodDoc("exturaddon.set_pose")
 	public void setPose(String pose) {
 		if(!canExturaCheat()) return;
 		try{
@@ -271,7 +271,7 @@ public class ExturaddonAPI {
 		}
 	}
 	@LuaWhitelist
-	@LuaMethodDoc("extura.set_physics")
+	@LuaMethodDoc("exturaddon.set_physics")
 	public void setPhysics(Boolean physics) {
 		if(!canExturaCheat()) return;
 		this.minecraft.player.noPhysics = !physics;
@@ -284,7 +284,7 @@ public class ExturaddonAPI {
 							argumentNames = "pos"
 					),
 			},
-			value = "extura.set_pos"
+			value = "exturaddon.set_pos"
 	)
 	public void setPos(Object x, Double y, Double z) {
 		if (!canExturaCheat() || x == null) return;
@@ -292,7 +292,7 @@ public class ExturaddonAPI {
 		player.setPos(LuaUtils.parseVec3("player_setPos", x, y, z).asVec3());
 	}
 	@LuaWhitelist
-	@LuaMethodDoc("extura.start_riding")
+	@LuaMethodDoc("exturaddon.start_riding")
 	public void startRiding(EntityAPI entity,boolean bool) {
 		if (!canExturaCheat()) return;
 		LocalPlayer player = this.minecraft.player;
@@ -310,34 +310,34 @@ public class ExturaddonAPI {
 	}
 
 	@LuaWhitelist
-	@LuaMethodDoc("extura.drop_item")
+	@LuaMethodDoc("exturaddon.drop_item")
 	public void dropItem(boolean dropAll) {
 		if(!this.isHost) return;
 		LocalPlayer player = this.minecraft.player;
 		player.drop(dropAll == true);
 	}
 	@LuaWhitelist
-	@LuaMethodDoc("extura.close_container")
+	@LuaMethodDoc("exturaddon.close_container")
 	public void closeContainer() {
 		LocalPlayer player = this.minecraft.player;
 		player.closeContainer();
 	}
 	@LuaWhitelist
-	@LuaMethodDoc("extura.start_using_item")
+	@LuaMethodDoc("exturaddon.start_using_item")
 	public void startUsingItem(boolean offHand) {
 		if (!canExturaCheat()) return;
 		LocalPlayer player = this.minecraft.player;
 		player.startUsingItem(offHand ? InteractionHand.OFF_HAND : InteractionHand.MAIN_HAND);
 	}
 	@LuaWhitelist
-	@LuaMethodDoc("extura.stop_using_item")
+	@LuaMethodDoc("exturaddon.stop_using_item")
 	public void stopUsingItem() {
 		if (!canExturaCheat()) return;
 		LocalPlayer player = this.minecraft.player;
 		player.stopUsingItem();
 	}
 	@LuaWhitelist
-	@LuaMethodDoc("extura.send_open_inventory")
+	@LuaMethodDoc("exturaddon.send_open_inventory")
 	public void sendOpenInventory() {
 		if (!canExturaCheat()) return;
 		LocalPlayer player = this.minecraft.player;
@@ -352,7 +352,7 @@ public class ExturaddonAPI {
 							argumentNames = {"playerMovement"}
 					)
 			},
-			value = "extura.set_player_movement"
+			value = "exturaddon.set_player_movement"
 	)
 	public void setPlayerMovement(Boolean playerMovement) {
 //?		if < 1.21.2 {
@@ -375,7 +375,7 @@ public class ExturaddonAPI {
 							argumentNames = {"input","state"}
 					),
 			},
-			value = "extura.override_player_movement"
+			value = "exturaddon.override_player_movement"
 	)
 	public void overridePlayerMovement(@LuaNotNil String input,Boolean sta) {
 		if(!canExturaCheat()) return;
@@ -401,7 +401,7 @@ public class ExturaddonAPI {
 *///?}
 	}
 	@LuaWhitelist
-	@LuaMethodDoc("extura.get_player_movement")
+	@LuaMethodDoc("exturaddon.get_player_movement")
 	public Boolean getPlayerMovement() {
 		LocalPlayer player;
 		if (!this.isHost || (player = this.minecraft.player) == null) return true;
@@ -413,7 +413,7 @@ public class ExturaddonAPI {
 	}
 
 	@LuaWhitelist
-	@LuaMethodDoc("extura.get_last_death_pos")
+	@LuaMethodDoc("exturaddon.get_last_death_pos")
 	public FiguraVec3 getLastDeathPos() {
 		if(!isHost) return null;
 		LocalPlayer player = this.minecraft.player;
@@ -437,7 +437,7 @@ public class ExturaddonAPI {
 							argumentNames = {"x", "y"}
 					)
 			},
-			value = "extura.set_rot"
+			value = "exturaddon.set_rot"
 	)
 	public void setRot(Object x, Double y) {
 		if(!canExturaCheat()) return;
@@ -456,7 +456,7 @@ public class ExturaddonAPI {
 							argumentNames = {"angle"}
 					)
 			},
-			value = "extura.set_body_rot"
+			value = "exturaddon.set_body_rot"
 	)
 	public void setBodyRot(Double angle) {
 		if(!canExturaCheat()) return;
@@ -473,7 +473,7 @@ public class ExturaddonAPI {
 							argumentNames = {"angle"}
 					)
 			},
-			value = "extura.set_body_offset_rot"
+			value = "exturaddon.set_body_offset_rot"
 	)
 	public void setBodyOffsetRot(Double angle) {
 		if(!canExturaCheat()) return;
@@ -489,7 +489,7 @@ public class ExturaddonAPI {
 							argumentNames = {"hasForce"}
 					)
 			},
-			value = "extura.set_gravity"
+			value = "exturaddon.set_gravity"
 	)
 	public void setGravity(Boolean hasForce) {
 		if(!canExturaCheat()) return;
@@ -507,7 +507,7 @@ public class ExturaddonAPI {
 							argumentNames = {"hasForce"}
 					)
 			},
-			value = "extura.set_drag"
+			value = "exturaddon.set_drag"
 	)
 	public void setDrag(Boolean hasForce) {
 		if(!canExturaCheat()) return;
@@ -518,7 +518,7 @@ public class ExturaddonAPI {
 
 
 	@LuaWhitelist
-	@LuaMethodDoc(value = "extura.getCameraType")
+	@LuaMethodDoc(value = "exturaddon.getCameraType")
 	public String getCameraType() {
 		if (!this.isHost){ return "THIRD_PERSON_FRONT";}
 		CameraType camera = Minecraft.getInstance().options.getCameraType();
@@ -537,7 +537,7 @@ public class ExturaddonAPI {
 							argumentNames = {"CameraType"}
 					)
 			},
-			value = "extura.setCameraType"
+			value = "exturaddon.setCameraType"
 	)
 	public void setCameraType(LuaValue isFirstPerson, @Nullable Boolean isBackwards) {
 		if (!this.isHost){ return;}
@@ -559,7 +559,7 @@ public class ExturaddonAPI {
 
 
 	@LuaWhitelist
-	@LuaMethodDoc("extura.get_key_mappings")
+	@LuaMethodDoc("exturaddon.get_key_mappings")
 	public Map<String, KeyMappingAPI<?>> getKeyMappings() {
 		if (!this.isHost) return new HashMap<>();
 		HashMap<String, KeyMappingAPI<?>> mappingslist = new HashMap<>();
@@ -575,7 +575,7 @@ public class ExturaddonAPI {
 	// borrowed this from vivecraft - jess
 
 	@LuaWhitelist
-	@LuaMethodDoc("extura.set_bind_pressed")
+	@LuaMethodDoc("exturaddon.set_bind_pressed")
 	public void setBindPressed(@LuaNotNil String id, boolean state) {
 		if (!isHost) return;
 		KeyMapping key = KeyMappingAccessor.getAll().get(id);
@@ -586,7 +586,7 @@ public class ExturaddonAPI {
 	}
 
 	@LuaWhitelist
-	@LuaMethodDoc("extura.get_all_entities")
+	@LuaMethodDoc("exturaddon.get_all_entities")
 	public static List<EntityAPI<?>> getAllEntities() {
 		List<EntityAPI<?>> ents = new ArrayList<>();
 		for (Entity ent : ((ClientLevelInvoker) getCurrentWorld()).getEntityGetter().getAll()) {
@@ -607,7 +607,7 @@ public class ExturaddonAPI {
 							argumentNames = {"half_range", "x", "y", "z"}
 					)
 			},
-			value = "extura.get_nearby_entities"
+			value = "exturaddon.get_nearby_entities"
 	)
 	public static Map<String, EntityAPI<?>> getNearbyEntities(Integer range, Object x, Double y, Double z) {
 		var pos = LuaUtils.parseVec3("getNearbyEntities", x, y, z).asVec3();
