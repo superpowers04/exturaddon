@@ -40,7 +40,7 @@ import org.figuramc.figura.avatar.local.LocalAvatarLoader;
 
 @Mixin(LocalAvatarLoader.class)
 public class LocalAvatarLoaderMixin {
-	@Shadow 
+	@Shadow
 	private static final HashMap<Path, WatchKey> KEYS = new HashMap<>();
 	@Shadow
 	protected static void addWatchKey(Path path, BiConsumer<Path, WatchKey> consumer) {}
@@ -103,7 +103,7 @@ public class LocalAvatarLoaderMixin {
 
 					// This is it, this is the Unix-only check. I(superpowers04) dunno why only Unix needs to add paths like this
 					// Learned this is possibly due to a bug with how Windows handles events, requiring the extendedwatchmodifier?
-					if (kind == StandardWatchEventKinds.ENTRY_CREATE) 
+					if (kind == StandardWatchEventKinds.ENTRY_CREATE)
 						addWatchKey(path, KEYS::put);
 
 					event = watchEvent;

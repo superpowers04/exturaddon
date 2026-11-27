@@ -24,7 +24,6 @@ public class LevelRendererMixin {
 *///? } else if > 1.21.1{
  	/*@ModifyExpressionValue(method = "collectVisibleEntities", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;isSleeping()Z"))
 *///? } else {
-
 	@ModifyExpressionValue(method = "renderLevel", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;isSleeping()Z"))
 //?}
 	private boolean forceModelRender(boolean original) {
