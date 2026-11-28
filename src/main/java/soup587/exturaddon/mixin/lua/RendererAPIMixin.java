@@ -35,6 +35,9 @@ public class RendererAPIMixin implements RendererAPIAccessor {
 	@LuaFieldDoc("renderer.render_Effects")
 	public boolean renderEffects = true;
 	@LuaWhitelist
+	@LuaFieldDoc("exturaddon.renderer.render_subtitles")
+	public boolean renderSubtitles = true;
+	@LuaWhitelist
 	@LuaFieldDoc("renderer.render_gui")
 	public boolean renderGUI = true;
 	@LuaFieldDoc("renderer.render_first_person")
@@ -89,6 +92,12 @@ public class RendererAPIMixin implements RendererAPIAccessor {
 	@LuaMethodDoc("renderer.should_render_effects")
 	public boolean shouldRenderEffects() {
 		return renderEffects;
+	}
+
+	@LuaWhitelist
+	@LuaMethodDoc("exturaddon.renderer.should_render_subtitles")
+	public boolean shouldRenderSubtitles() {
+		return renderSubtitles;
 	}
 
 	@LuaWhitelist
@@ -240,6 +249,7 @@ public class RendererAPIMixin implements RendererAPIAccessor {
 			case "renderExperienceBar" -> renderExperienceBar;
 			case "renderJumpMeter" -> renderJumpMeter;
 			case "renderEffects" -> renderEffects;
+			case "renderSubtitles" -> renderSubtitles;
 			case "renderGUI" -> renderGUI;
 			case "renderFirstPerson" -> renderFirstPerson;
 			case "renderLeftItem" -> renderLeftItem;
@@ -261,6 +271,7 @@ public class RendererAPIMixin implements RendererAPIAccessor {
 			case "renderExperienceBar" -> renderExperienceBar = value;
 			case "renderJumpMeter" -> renderJumpMeter = value;
 			case "renderEffects" -> renderEffects = value;
+			case "renderSubtitles" -> renderSubtitles = value;
 			case "renderGUI" -> renderGUI = value;
 			case "renderFirstPerson" -> renderFirstPerson = value;
 			case "doViewbobbing" -> doViewbobbing = value;

@@ -7,6 +7,7 @@ public interface RendererAPIAccessor {
 	boolean shouldRenderExperienceBar();
 	boolean shouldRenderJumpMeter();
 	boolean shouldRenderEffects();
+	boolean shouldRenderSubtitles();
 	boolean shouldRenderGUI();
 	boolean shouldRenderFirstPerson();
 	boolean shouldRenderLeftItem();

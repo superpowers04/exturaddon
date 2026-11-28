@@ -16,7 +16,8 @@
     "lua.EntityAPIMixin",
     "lua.RendererAPIMixin",
     "render.LevelRendererMixin",
-    "render.GuiMixin"
+    "render.GuiMixin",
+    "render.SubtitleOverlayMixin"
   ],
   "mixinextras": {"minVersion": "0.5.0"}
 }
