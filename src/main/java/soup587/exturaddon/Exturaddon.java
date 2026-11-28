@@ -38,7 +38,6 @@ public class Exturaddon {
 			FiguraAPIManager.WHITELISTED_CLASSES.add(ExturaddonAPI.class);
 			FiguraAPIManager.API_GETTERS.put("exturaddon", r -> new ExturaddonAPI(r.owner));
 		}catch(Exception err){
-			LOGGER.warn()
 		}
 	}
 
