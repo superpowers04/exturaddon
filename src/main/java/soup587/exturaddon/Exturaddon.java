@@ -32,9 +32,14 @@ public class Exturaddon {
 	private static final Platform PLATFORM = createPlatformInstance();
 
 	public static void onInitialize() {
-		FiguraAPIManager.WHITELISTED_CLASSES.add(KeyMappingAPI.class);
-		FiguraAPIManager.WHITELISTED_CLASSES.add(ExturaddonAPI.class);
-		FiguraAPIManager.API_GETTERS.put("exturaddon", r -> new ExturaddonAPI(r.owner));
+		try{
+
+			FiguraAPIManager.WHITELISTED_CLASSES.add(KeyMappingAPI.class);
+			FiguraAPIManager.WHITELISTED_CLASSES.add(ExturaddonAPI.class);
+			FiguraAPIManager.API_GETTERS.put("exturaddon", r -> new ExturaddonAPI(r.owner));
+		}catch(Exception err){
+			LOGGER.warn()
+		}
 	}
 
 	static Platform xplat() {
